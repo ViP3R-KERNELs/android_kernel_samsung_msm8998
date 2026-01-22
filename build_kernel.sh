@@ -1,13 +1,59 @@
 #!/bin/bash
+set -e -o pipefail
 
-export PATH=$(pwd)/../PLATFORM/prebuilts/gcc/linux-x86/aarch64/aarch64-linux-android-4.9/bin:$PATH
-# export SEC_BUILD_OPTION_HW_REVISION=02
+# =========================
+#   BUILD IDENTITY
+# =========================
+DATE=$(date +'%Y%m%d-%H%M')
 
-mkdir out
+export ARCH=arm64
+export DEFCONFIG=viper_defconfig
 
-make -C $(pwd) O=$(pwd)/out ARCH=arm64 CROSS_COMPILE=aarch64-linux-android- KCFLAGS=-mno-android dreamqlte_usa_open_defconfig
+export LOCALVERSION=-ViP3R🐍-v1.0-NETHUNTER-EDITION-2K26
+export KBUILD_BUILD_USER=IamCOD3X
+export KBUILD_BUILD_HOST=RYZEN
 
+# =========================
+#   PATHS
+# =========================
+KERNEL_PATH=$(pwd)
+OUT=${KERNEL_PATH}/out
+JOBS=$(nproc)
 
-make -j64 -C $(pwd) O=$(pwd)/out ARCH=arm64 CROSS_COMPILE=aarch64-linux-android- KCFLAGS=-mno-android
+# =========================
+#   TOOLCHAIN (GCC)
+# =========================
+TC_PATH=/home/ripper/Desktop/OS/KERNEL_STUFF/ToolChains
 
-cp out/arch/arm64/boot/Image $(pwd)/arch/arm64/boot/Image
+export PATH="${TC_PATH}/aarch64-linux-androidkernel/bin:${TC_PATH}/armhf-4.9/bin:${PATH}"
+
+export CROSS_COMPILE=aarch64-linux-android-
+export CROSS_COMPILE_ARM32=arm-linux-androideabi-
+
+# =========================
+#   CLEAN
+# =========================
+echo "[*] Cleaning source"
+make mrproper
+rm -rf "${OUT}"
+mkdir -p "${OUT}"
+
+# =========================
+#   DEFCONFIG
+# =========================
+echo "[*] Applying defconfig: ${DEFCONFIG}"
+make \
+  O="${OUT}" \
+  ARCH=arm64 \
+  ${DEFCONFIG}
+
+# =========================
+#   BUILD
+# =========================
+echo "[*] Building kernel (GCC)"
+make \
+  -j${JOBS} \
+  O="${OUT}" \
+  ARCH=arm64
+
+echo "[✓] Kernel build finished"
