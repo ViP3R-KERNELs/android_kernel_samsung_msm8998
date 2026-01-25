@@ -36,7 +36,7 @@ export CROSS_COMPILE_ARM32=arm-linux-androideabi-
 #   CLEAN
 # =========================
 echo "[*] Cleaning source"
-make mrproper
+make clean && make mrproper
 rm -rf "${OUT}"
 mkdir -p "${OUT}"
 
