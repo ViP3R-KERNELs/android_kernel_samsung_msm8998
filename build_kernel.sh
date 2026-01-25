@@ -12,6 +12,8 @@ export DEFCONFIG=viper_defconfig
 export LOCALVERSION=-ViP3R🐍-v1.0-NETHUNTER-EDITION-2K26
 export KBUILD_BUILD_USER=IamCOD3X
 export KBUILD_BUILD_HOST=RYZEN
+export ANDROID_MAJOR_VERSION=p
+export PLATFORM_VERSION=9.0.0
 
 # =========================
 #   PATHS
